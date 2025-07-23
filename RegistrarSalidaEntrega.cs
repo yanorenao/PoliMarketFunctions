@@ -10,7 +10,7 @@ public static class RegistrarSalidaEntrega
 {
     [FunctionName("RegistrarSalidaEntrega")]
     public static IActionResult Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "entregas/salida")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "entregas/salida")] HttpRequest req,
         ILogger log)
     {
         // Ejemplo: /entregas/salida?productoId=101&cantidad=1&ventaId=1

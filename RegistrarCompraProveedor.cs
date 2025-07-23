@@ -12,7 +12,7 @@ public static class RegistrarCompraProveedor
 {
     [FunctionName("RegistrarCompraProveedor")]
     public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "bodega/entradas")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "bodega/entradas")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("C# HTTP trigger - Bodega registrando entrada de productos.");

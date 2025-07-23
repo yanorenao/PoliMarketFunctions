@@ -11,7 +11,7 @@ namespace PoliMarketFunctions
     {
         [FunctionName("GetClientes")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "clientes")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "clientes")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger: Se solicitó la lista de clientes.");

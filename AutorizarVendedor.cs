@@ -12,7 +12,7 @@ public static class AutorizarVendedor
 {
     [FunctionName("AutorizarVendedor")]
     public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "vendedores/{id}/autorizar")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "vendedores/{id}/autorizar")] HttpRequest req,
         int id,
         ILogger log)
     {

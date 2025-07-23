@@ -13,7 +13,7 @@ public static class RegistrarVenta
 {
     [FunctionName("RegistrarVenta")]
     public static async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "ventas")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ventas")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("C# HTTP trigger - Registrando nueva venta.");

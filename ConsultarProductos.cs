@@ -9,7 +9,7 @@ public static class ConsultarProductos
 {
     [FunctionName("ConsultarProductos")]
     public static IActionResult Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "productos")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "productos")] HttpRequest req,
         ILogger log)
     {
         log.LogInformation("C# HTTP trigger - Consultando productos disponibles desde Ventas.");
