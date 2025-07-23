@@ -1,8 +1,8 @@
 # PoliMarketFunctions - Sistema de Funciones en Azure
 
-Este proyecto implementa una serie de microservicios utilizando **Azure Functions** y **C#** para simular las operaciones de la empresa **PoliMarket**. El sistema se basa en la descripción de un problema académico del módulo _"Temas avanzados en diseño de software"_.
+Este proyecto implementa una serie de microservicios utilizando **Azure Functions** y **C#** para simular las operaciones de la empresa **PoliMarket**. El sistema se basa en un caso académico del módulo _"Temas avanzados en diseño de software"_.
 
-La empresa PoliMarket cuenta con diferentes áreas de negocio, cada una con sistemas de información separados, como son: **bodega, ventas, recursos humanos, proveedores y entregas**. Este proyecto busca implementar 5 requisitos funcionales clave que reflejan la interacción entre estas áreas.
+PoliMarket cuenta con diferentes áreas de negocio, cada una con sistemas de información separados: **bodega**, **ventas**, **recursos humanos**, **proveedores** y **entregas**. Este proyecto implementa requisitos funcionales clave que reflejan la interacción entre estas áreas.
 
 ---
 
@@ -10,16 +10,16 @@ La empresa PoliMarket cuenta con diferentes áreas de negocio, cada una con sist
 
 Para ejecutar este proyecto localmente, necesitarás tener instalado lo siguiente:
 
-- .NET SDK (versión 7.0 o superior)  
-- Azure Functions Core Tools (v4)  
-- Node.js (necesario para instalar las Core Tools vía `npm`)  
-- Un editor de código como **Visual Studio Code**
+- [.NET SDK 8.0 o superior](https://dotnet.microsoft.com/)
+- [Azure Functions Core Tools v4](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local)
+- [Node.js](https://nodejs.org/) (necesario para instalar las Core Tools vía `npm`)
+- Un editor de código como [Visual Studio Code](https://code.visualstudio.com/)
 
 ---
 
 ## ⚙️ Configuración y Ejecución
 
-### 1. Clonar el Repositorio (si aplica)
+### 1. Clonar el Repositorio
 
 ```bash
 git clone <url-del-repositorio>
@@ -36,29 +36,25 @@ dotnet build
 
 ### 3. Iniciar el Host de Funciones
 
-Para iniciar el servicio localmente, ejecuta:
+Para iniciar el servicio localmente:
 
 ```bash
 func start
 ```
 
-El host se iniciará en [http://localhost:7071](http://localhost:7071).
+El host estará disponible en `http://localhost:7071`.
 
 ---
 
 ## 🚀 Funcionalidades Implementadas
 
-El sistema expone **5 endpoints HTTP** que corresponden a los requisitos funcionales extraídos del problema.
-
----
+El sistema expone **7 endpoints HTTP** que simulan los procesos clave de PoliMarket:
 
 ### 1. Autorizar Vendedor (Recursos Humanos)
 
-Autoriza a un vendedor para que pueda interactuar con los demás sistemas de la organización.
+Autoriza a un vendedor para que pueda interactuar con otros sistemas.
 
 - **Endpoint:** `POST /api/vendedores/{id}/autorizar`
-
-#### Ejemplo:
 
 ```bash
 curl -X POST http://localhost:7071/api/vendedores/1/autorizar
@@ -68,11 +64,9 @@ curl -X POST http://localhost:7071/api/vendedores/1/autorizar
 
 ### 2. Consultar Productos Disponibles (Ventas)
 
-Permite a un vendedor ver la lista de productos disponibles. Internamente, este componente se conecta con la bodega para obtener la disponibilidad.
+Permite ver productos disponibles con precios y descripción. Consulta a la bodega internamente.
 
 - **Endpoint:** `GET /api/productos`
-
-#### Ejemplo:
 
 ```bash
 curl http://localhost:7071/api/productos
@@ -82,11 +76,9 @@ curl http://localhost:7071/api/productos
 
 ### 3. Registrar una Venta (Ventas)
 
-Permite a un vendedor autorizado registrar una venta para un cliente con productos específicos.
+Registra una venta con productos específicos para un cliente.
 
 - **Endpoint:** `POST /api/ventas`
-
-#### Ejemplo:
 
 ```bash
 curl -X POST http://localhost:7071/api/ventas \
@@ -98,11 +90,9 @@ curl -X POST http://localhost:7071/api/ventas \
 
 ### 4. Registrar Compra a Proveedor (Bodega)
 
-Permite a la bodega registrar la entrada de nuevos productos adquiridos de un proveedor.
+Registra la entrada de productos adquiridos de un proveedor.
 
 - **Endpoint:** `POST /api/bodega/entradas`
-
-#### Ejemplo:
 
 ```bash
 curl -X POST "http://localhost:7071/api/bodega/entradas?productoId=101&cantidad=20&proveedor=NewTech"
@@ -112,14 +102,36 @@ curl -X POST "http://localhost:7071/api/bodega/entradas?productoId=101&cantidad=
 
 ### 5. Registrar Salida para Entrega (Entregas)
 
-Permite al área de entregas registrar la salida de productos del stock de la bodega para ser entregados a un cliente.
+Registra la salida de productos del inventario para entregas.
 
 - **Endpoint:** `POST /api/entregas/salida`
 
-#### Ejemplo:
-
 ```bash
 curl -X POST "http://localhost:7071/api/entregas/salida?productoId=102&cantidad=5&ventaId=123"
+```
+
+---
+
+### 6. Consultar Clientes
+
+Lista todos los clientes potenciales.
+
+- **Endpoint:** `GET /api/clientes`
+
+```bash
+curl http://localhost:7071/api/clientes
+```
+
+---
+
+### 7. Consultar Proveedores
+
+Lista los proveedores registrados.
+
+- **Endpoint:** `GET /api/proveedores`
+
+```bash
+curl http://localhost:7071/api/proveedores
 ```
 
 ---
@@ -128,17 +140,21 @@ curl -X POST "http://localhost:7071/api/entregas/salida?productoId=102&cantidad=
 
 ```
 PoliMarketFunctions/
-├── Models/                      # Clases que representan las entidades del negocio
+├── Models/                 
+│   ├── Cliente.cs
 │   ├── Producto.cs
+│   ├── Proveedor.cs
 │   ├── Vendedor.cs
 │   └── Venta.cs
-├── Database/                    # Simulación de la base de datos en memoria
+├── Database/               
 │   └── InMemoryData.cs
-├── AutorizarVendedor.cs         # RF1: Función para autorizar vendedores
-├── ConsultarProductos.cs        # RF2: Función para listar productos
-├── RegistrarVenta.cs            # RF3: Función para registrar ventas
-├── RegistrarCompraProveedor.cs  # RF4: Función para registrar entradas de bodega
-├── RegistrarSalidaEntrega.cs    # RF5: Función para registrar salidas de bodega
-├── PoliMarketFunctions.csproj   # Archivo de proyecto .NET
-└── local.settings.json          # Configuración local de la función
+├── AutorizarVendedor.cs
+├── ConsultarProductos.cs
+├── GetClientes.cs
+├── GetProveedores.cs
+├── RegistrarCompraProveedor.cs
+├── RegistrarSalidaEntrega.cs
+├── RegistrarVenta.cs
+├── PoliMarketFunctions.csproj
+└── local.settings.json
 ```
