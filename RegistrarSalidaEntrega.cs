@@ -4,7 +4,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PoliMarketFunctions.Database;
-using System.Linq;
+using PoliMarketFunctions.Models;
 
 public static class RegistrarSalidaEntrega
 {
@@ -20,7 +20,17 @@ public static class RegistrarSalidaEntrega
 
         log.LogInformation($"Entregas se comunica con Ventas para la venta {ventaId}.");
 
-        var producto = InMemoryData.Productos.FirstOrDefault(p => p.Id == productoId);
+        // Buscar producto
+        Producto producto = null;
+        foreach (var p in InMemoryData.Productos)
+        {
+            if (p.Id == productoId)
+            {
+                producto = p;
+                break;
+            }
+        }
+
         if (producto == null || producto.CantidadEnStock < cantidad)
         {
             return new BadRequestObjectResult("Producto no encontrado o sin stock suficiente.");

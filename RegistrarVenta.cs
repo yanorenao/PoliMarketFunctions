@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PoliMarketFunctions.Models;
-using System.Linq;
 using PoliMarketFunctions.Database;
 
 public static class RegistrarVenta
@@ -22,7 +21,17 @@ public static class RegistrarVenta
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         var venta = JsonConvert.DeserializeObject<Venta>(requestBody);
 
-        var vendedor = InMemoryData.Vendedores.FirstOrDefault(v => v.Id == venta.VendedorId);
+        // Buscar vendedor
+        Vendedor vendedor = null;
+        foreach (var v in InMemoryData.Vendedores)
+        {
+            if (v.Id == venta.VendedorId)
+            {
+                vendedor = v;
+                break;
+            }
+        }
+
         if (vendedor == null || !vendedor.Autorizado)
         {
             return new UnauthorizedResult(); // El vendedor no existe o no está autorizado

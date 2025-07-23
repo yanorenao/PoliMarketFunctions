@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PoliMarketFunctions.Database;
-using System.Linq;
+using PoliMarketFunctions.Models;
 
 public static class RegistrarCompraProveedor
 {
@@ -25,7 +25,17 @@ public static class RegistrarCompraProveedor
         int.TryParse(productoIdStr, out int productoId);
         int.TryParse(cantidadStr, out int cantidad);
 
-        var producto = InMemoryData.Productos.FirstOrDefault(p => p.Id == productoId);
+        // Buscar el producto
+        Producto producto = null;
+        foreach (var p in InMemoryData.Productos)
+        {
+            if (p.Id == productoId)
+            {
+                producto = p;
+                break;
+            }
+        }
+
         if (producto == null)
         {
             return new NotFoundObjectResult("Producto no encontrado.");
